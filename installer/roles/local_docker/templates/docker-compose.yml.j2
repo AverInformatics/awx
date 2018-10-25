@@ -74,7 +74,7 @@ services:
     hostname: {{ awx_task_hostname }}
     user: root
     restart: unless-stopped
-    {% if (project_data_dir is defined) or (ca_trust_dir is defined) %}
+    {% if (project_data_dir is defined) or (ca_trust_dir is defined) or (ssl_certificate_dir is defined) %}
     volumes:
     {% endif %}
     {% if project_data_dir is defined %}

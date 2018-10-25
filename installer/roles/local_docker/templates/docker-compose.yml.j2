@@ -15,7 +15,7 @@ services:
     hostname: {{ awx_web_hostname }}
     user: root
     restart: unless-stopped
-    {% if (project_data_dir is defined) or (ca_trust_dir is defined) %}
+    {% if (project_data_dir is defined) or (ca_trust_dir is defined) or (ssl_certificate_dir is defined) %}
     volumes:
     {% endif %}
     {% if project_data_dir is defined %}
@@ -23,6 +23,9 @@ services:
     {% endif %}
     {% if ca_trust_dir is defined %}
       - "{{ ca_trust_dir +':/etc/pki/ca-trust/source/anchors:ro' }}"
+    {% endif %}
+    {% if ssl_certificate_dir is defined %}
+      - "{{ ssl_certificate_dir +':/etc/nginx/certs:ro' }}"
     {% endif %}
     {% if (awx_container_search_domains is defined) and (',' in awx_container_search_domains) %}
     {% set awx_container_search_domains_list = awx_container_search_domains.split(',') %}
@@ -74,7 +77,7 @@ services:
     hostname: {{ awx_task_hostname }}
     user: root
     restart: unless-stopped
-    {% if (project_data_dir is defined) or (ca_trust_dir is defined) or (ssl_certificate_dir is defined) %}
+    {% if (project_data_dir is defined) or (ca_trust_dir is defined) %}
     volumes:
     {% endif %}
     {% if project_data_dir is defined %}
@@ -82,9 +85,6 @@ services:
     {% endif %}
     {% if ca_trust_dir is defined %}
       - "{{ ca_trust_dir +':/etc/pki/ca-trust/source/anchors:ro' }}"
-    {% endif %}
-    {% if ssl_certificate_dir is defined %}
-      - "{{ ssl_certificate_dir +':/etc/nginx/certs:ro' }}"
     {% endif %}
     {% if (awx_container_search_domains is defined) and (',' in awx_container_search_domains) %}
     {% set awx_container_search_domains_list = awx_container_search_domains.split(',') %}
